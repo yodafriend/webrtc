@@ -2,14 +2,8 @@ var PORT = process.env.PORT||3000;
 var express = require("express");
 var app = express();
 
-const fs = require('fs');
-var https = require('https');
-var server = https.createServer({
-  key:fs.readFileSync("private.pem"),
-  cert: fs.readFileSync("public.pem"),
-},
-app
-);
+var http = require('http');
+var server = http.Server(app);
 var socket = require("socket.io");
 
 console.log("success")
