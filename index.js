@@ -1,11 +1,12 @@
 const express = require("express");
 const socket = require("socket.io");
-const app = express();
-//Starts the server
+var server = require("http").Server(app);
 
-let server = app.listen(4000, function () {
-  console.log("Server is running");
-});
+var app = express();
+var port = process.env.PORT ||3000;
+console.log("success")
+var server = app.listen(port);
+//Starts the server
 
 app.use(express.static("public"));
 
