@@ -1,13 +1,16 @@
-const express = require("express");
-const socket = require("socket.io");
-var server = require("http").Server(app);
-
+var PORT = 3000;
+var express = require("express");
 var app = express();
-var port = process.env.PORT ||3000;
-console.log("success")
-var server = app.listen(port);
-//Starts the server
 
+var http = require('http');
+var server = http.Server(app);
+var socket = require("socket.io");
+
+console.log("success")
+server.listen(PORT,function(){
+  console.log('Server running')
+})
+//Starts the server
 app.use(express.static("public"));
 
 //Upgrades the server to accept websockets.
