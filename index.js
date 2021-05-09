@@ -10,25 +10,23 @@ console.log("success")
 server.listen(PORT,function(){
   console.log('Server running')
 })
-//Starts the server
+//서버시작
 app.use(express.static("public"));
-
-//Upgrades the server to accept websockets.
 
 let io = socket(server);
 
-//Triggered when a client is connected.
+//클라이언트 조인.
 
 io.on("connection", function (socket) {
   console.log("User Connected :" + socket.id);
 
-  //Triggered when a peer hits the join room button.
+  //peer가 조인누를시
 
   socket.on("join", function (roomName) {
     let rooms = io.sockets.adapter.rooms;
     let room = rooms.get(roomName);
 
-    //room == undefined when no such room exists.
+    //room 이름으로 들어가기.
     if (room == undefined) {
       socket.join(roomName);
       socket.emit("created");
@@ -37,34 +35,30 @@ io.on("connection", function (socket) {
       socket.join(roomName);
       socket.emit("joined");
     } else {
-      //when there are already two people inside the room.
+      //두명이상시
       socket.emit("full");
     }
     console.log(rooms);
   });
 
-  //Triggered when the person who joined the room is ready to communicate.
+  
   socket.on("ready", function (roomName) {
-    socket.broadcast.to(roomName).emit("ready"); //Informs the other peer in the room.
+    socket.broadcast.to(roomName).emit("ready"); 
   });
-
-  //Triggered when server gets an icecandidate from a peer in the room.
 
   socket.on("candidate", function (candidate, roomName) {
     console.log(candidate);
-    socket.broadcast.to(roomName).emit("candidate", candidate); //Sends Candidate to the other peer in the room.
+    socket.broadcast.to(roomName).emit("candidate", candidate); 
   });
 
-  //Triggered when server gets an offer from a peer in the room.
+
 
   socket.on("offer", function (offer, roomName) {
-    socket.broadcast.to(roomName).emit("offer", offer); //Sends Offer to the other peer in the room.
+    socket.broadcast.to(roomName).emit("offer", offer);
   });
 
-  //Triggered when server gets an answer from a peer in the room.
-
   socket.on("answer", function (answer, roomName) {
-    socket.broadcast.to(roomName).emit("answer", answer); //Sends Answer to the other peer in the room.
+    socket.broadcast.to(roomName).emit("answer", answer); 
   });
     socket.on("leave",function(roomName){
     socket.leave(roomName);
